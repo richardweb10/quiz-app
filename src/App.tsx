@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy } from 'react';
+import {
+  BrowserRouter,
+  Switch,
+  Route
+} from "react-router-dom";
+import Home from './pages/home';
+import Register from './pages/register';
+//const Home = lazy(() => import('./pages/home'));
+//const NotFound = lazy(() => import('./pages/NotFound'));
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+     
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/signup" component={Register} />
+        </Switch>
+    </BrowserRouter>
   );
 }
 
+
 export default App;
+
+
+//export default App;
