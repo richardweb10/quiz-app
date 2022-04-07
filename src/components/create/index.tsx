@@ -8,8 +8,11 @@ import { handlerIsLogin } from '../../utils';
 import TextField from '@mui/material/TextField';
 import FieldsQuestion from './question';
 import AddIcon from '@mui/icons-material/Add';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useHistory } from "react-router-dom";
 
-function Login(props: any) {
+function CreateQuest(props: any) {
 
     const [name, setName] = useState('');
     const [openModal, setOpenModal] = useState(false);
@@ -21,12 +24,51 @@ function Login(props: any) {
             { id: 0, question: 0, value: "" },
             { id: 1, question: 0, value: "" },
         ])
+    let history = useHistory();
+
+
+    useEffect(() =>{
+            if(props.idQuest){
+                props.actions.getQuestById({ idQuest: props.idQuest });
+            }
+    },[])
 
     useEffect(() => {
-        if (props.dataLogin !== undefined) {
-            handlerIsLogin(props.dataLogin);
+        if (props.dataById) {
+            setName(props.dataById.name);
+            setQuestions(props.dataById.listQuestions);
+            setOptions(props.dataById.listOptions);
         }
-    }, [props.dataLogin])
+    }, [props.dataById])
+
+    useEffect(() => {
+        if (props.data) {
+            initState();
+            setTitleError('Creación de cuestionario');
+            setMessageError('Se creó exitosamente el cuestionario.');
+            setOpenModal(true);
+            props.actions.clearQuest({});
+            history.push("/");
+
+        }
+    }, [props.data])
+
+    useEffect(() => {
+        if(props.idQuest == ''){
+            initState();
+        }
+    },[props.idQuest])
+
+    const initState = () => {
+        setName('');
+            setQuestions([{ id: 0, value: "", correct: 0 }]);
+            setOptions(
+                [
+                    { id: 0, question: 0, value: "" },
+                    { id: 1, question: 0, value: "" },
+                ])
+    }
+
 
     useEffect(() => {
         if (props.error) {
@@ -43,7 +85,6 @@ function Login(props: any) {
             setOpenModal(true);
         }
 
-
     }, [props.error])
 
 
@@ -52,12 +93,18 @@ function Login(props: any) {
     const onSave = (e: any) => {
         e.preventDefault();
         if (name !== '' && validData(questions) && validData(options) ) {
-            const data = {
+            const data:any = {
                 name,
                 questions,
                 options
             }
-            props.actions.create(data);
+            if(props.idQuest==""){
+                props.actions.create(data);
+            }else{
+                data['idQuest'] = props.idQuest
+                props.actions.updateQuest(data);
+            }
+            
         } else {
             setTitleError('Validación');
             setMessageError('Debe ingresar todos los campos');
@@ -92,10 +139,16 @@ function Login(props: any) {
     }
 
     const removeQuestion = (id: any) => {
+        if (questions.length > 1) {
         let questionField = questions.filter((elem: any) => elem.id != id);
         setQuestions(questionField);
         var filtered = options.filter((elem: any) => elem.question != id);
         setOptions(filtered);
+        }else{
+            setTitleError('Validación');
+            setMessageError('Debe existir al menos una pregunta');
+            setOpenModal(true); 
+        }
     }
 
     const changeQuestion = (value:any, key:any, id:any) =>{
@@ -151,8 +204,7 @@ function Login(props: any) {
 
     return (
         <>
-            <h3 style={{ textAlign: 'center' }}>Crea tu Cuestionario</h3>
-
+            
             <TextField
                 fullWidth sx={{ margin: 0 }}
                 id="outlined-basic"
@@ -194,6 +246,12 @@ function Login(props: any) {
 
             </div>
 
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={props.isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
 
 
             <ModalResponse
@@ -209,7 +267,9 @@ function Login(props: any) {
 
 const mapStateToProps = (state: any) => ({
     isLoading: state.quest.isLoading,
+    isLoadingById: state.quest.isLoadingById,
     data: state.quest.data,
+    dataById: state.quest.dataById,
     error: state.quest.error,
 })
 
@@ -217,4 +277,4 @@ const mapDispatchToProps = (dispatch: any) => ({
     actions: bindActionCreators(questionnariesAction, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateQuest);

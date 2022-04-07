@@ -1,14 +1,11 @@
 import React from "react";
 import { connect } from 'react-redux';
-import CreateQuestion from '../../components/create';
-import styles from './styles.module.scss';
+import Questionnaire from '../../components/questionnaire';
+import styles from '../home/style.module.scss';
 import Header from '../../components/layout/header';
 
-function Home(props:any) {
+function Home() {
 
-  const idQuest = props.match.params.hasOwnProperty('quest')?props.match.params.quest:''
-  const textTitle = idQuest===''? 'Crea tu Cuestionario': 
-                                  'Actualizar Cuestionario';
 
   return (
     <div className={styles.container}>
@@ -20,9 +17,7 @@ function Home(props:any) {
 
       <Header />
       <main className={styles.main}>
-      <h3 style={{ textAlign: 'center' }}>{textTitle}</h3>
-
-        <CreateQuestion idQuest={idQuest} />
+        <Questionnaire />
 
         
       </main>

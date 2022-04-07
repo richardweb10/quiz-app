@@ -38,7 +38,7 @@ const styleModal = {
 function MenuUser(props: any) {
     const [open, setOpen] = React.useState(false);
     const [avatarUser, setAvatarUser] = React.useState(null);
-    const [nameUser, setNameUser] = React.useState(null);
+    const [nameUser, setNameUser] = React.useState('');
     const [modalConfirm, setModalConfirm] = React.useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [titleError, setTitleError] = React.useState('');
@@ -142,10 +142,12 @@ function MenuUser(props: any) {
                 aria-haspopup="true"
                 onClick={handleToggle}
             >
-                 <Avatar >U</Avatar>;   
+                 <Avatar sx={{ bgcolor: "#9c27b0", marginRight:'5px', cursor: "pointer"}} >
+                     {nameUser.charAt(0).toUpperCase()}
+                    </Avatar> 
                 <FaEllipsisH
                     size={20}
-                    color="#3CB371"
+                    color="#9c27b0"
                 />
             </Button>
 
@@ -173,6 +175,9 @@ function MenuUser(props: any) {
                                         aria-labelledby="composition-button"
                                         onKeyDown={handleListKeyDown}
                                     >
+                                         <MenuItem >
+                                             {nameUser}
+                                        </MenuItem>
                                         <MenuItem onClick={modalConfirmShow}>
                                             <ListItemIcon>
                                                 <Logout fontSize="small" />

@@ -1,10 +1,19 @@
-import React from "react";
+import React, {useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import Login from '../../components/auth/login';
+import Questionnaire from '../../components/questionnaire';
 import styles from './style.module.scss';
 import Header from '../../components/layout/header';
+import { get } from '../../utils/SesionStorage';
 
 function Home() {
+
+  const [id_user, setId_user] = useState('');
+
+  useEffect(() => {
+    const idUser = get("@id_user") ?? '';
+    setId_user(idUser);
+  }, []);
 
 
   return (
@@ -17,7 +26,10 @@ function Home() {
 
       <Header />
       <main className={styles.main}>
-        <Login />
+        {id_user == ""?
+        <Login />:
+        <Questionnaire />}
+        
 
         
       </main>

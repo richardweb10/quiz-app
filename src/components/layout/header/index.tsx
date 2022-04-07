@@ -12,6 +12,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import { Link } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+
 
 
 const itemMenu = { minWidth: 100, color: 'blue', cursor: 'pointer' }
@@ -21,7 +23,7 @@ function Header(props:any) {
 
   const [show, setShow] = useState(false);
   const [tokenUser, setToken] = useState(null);
-  const [nameUser, setNameUser] = useState(null);
+  const [nameUser, setNameUser] = useState('');
   const [avatarUser, setAvatarUser] = useState(null)
   const [showMenuUser, setShowMenuUser] = useState(false);
   const [id_user, setId_user] = useState('');
@@ -56,8 +58,8 @@ function Header(props:any) {
         {/*<Menu />*/}
         <div >
           
-            <a href="/"  >
-              <h1>Aplicación Quiz</h1>
+              <a className={styles.h1Title} href="/"  >
+                <h1>Aplicación Quiz</h1>
               </a>
           
         </div>
@@ -68,12 +70,17 @@ function Header(props:any) {
         
         {tokenUser !== null ?
           <div >
-            <Stack direction="row" spacing={2}>
-            <a href="/create">
-            <Avatar sx={{ bgcolor: "#3cb371", margin: "6px 8px", cursor: "pointer"}}>
+            <Stack direction="row" spacing={3}>
+            <Link to="/">
+            <Avatar sx={{ bgcolor: "#1976d2", margin: "6px 8px", cursor: "pointer"}}>
+              <HomeIcon />
+            </Avatar>
+            </Link>
+            <Link to="/create">
+                <Avatar sx={{ bgcolor: "#1976d2", margin: "6px 8px", cursor: "pointer"}}>
               <AddIcon />
             </Avatar>
-            </a>
+            </Link>
 
             <MenuUser 
                 avatarUser={avatarUser} 
