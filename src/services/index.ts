@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Auth from './api/auth';
+import Quest from './api/quest';
 
 import config from './../config';
 const header:any = {
@@ -17,10 +18,12 @@ const create =  (headers:any = header, baseURL:any = config.url_api) =>{
     
 
     const auth = Auth(api);
+    const quest = Quest(api);
     
     return {
         setHeader: (key: string, value: string) => api.defaults.headers.common[key] = value,
         auth,
+        quest
     }
 }
 
